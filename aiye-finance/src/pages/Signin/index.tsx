@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 // form bootstrap para login
 import Form from 'react-bootstrap/Form';
 // botão bootstrap
@@ -11,6 +11,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 // form event
 import { FormEvent } from "react";
+import { postSignin } from "../../helpers/post";
+// context
+import { AuthContext } from "../../providers/auth-provider";
 
 
 
@@ -18,12 +21,27 @@ function Signin()
 {
      const [username, setUsername] = useState<string>('');
      const [password, setPassword] = useState<string>('');
+     const { setToken } = useContext(AuthContext);
 
 
      // adicionar tipo de submit
      async function handleSubmit(e: FormEvent<HTMLFormElement>)
      {
+          console.log('submit');
           e.preventDefault();
+          const token: string | null = await postSignin(username, password);
+
+          if (token !== null)
+          {
+               setToken(token);
+               await new Promise(resolve => setTimeout(resolve, 500));
+               window.location.href = '/';
+          }
+
+          setUsername('');
+          setPassword('');
+          
+          return;
      }
 
      return (
@@ -39,7 +57,9 @@ function Signin()
                                    <Form.Label>Nome de usuário</Form.Label>
                                    <Form.Control type="text" placeholder="nome de usuário" 
                                         onChange={(e) => setUsername(e.target.value)}
-                                        value={username}
+                                        value={username} required
+                                        pattern="^[a-zA-Z0-9]{3,30}$"
+                                        title="O nome de usuário deve conter apenas letras e números, e deve ter entre 3 e 30 caracteres"
                                    />
                               </Form.Group>
 
@@ -47,7 +67,9 @@ function Signin()
                                    <Form.Label>Senha</Form.Label>
                                    <Form.Control type="password" placeholder="senha" 
                                         onChange={(e) => setPassword(e.target.value)}
-                                        value={password}
+                                        value={password} required
+                                        maxLength={20} minLength={6}
+                                        title="A senha deve ter entre 6 e 20 caracteres"
                                    />
                               </Form.Group>
                               <Button variant="primary" type="submit" className="w-100">

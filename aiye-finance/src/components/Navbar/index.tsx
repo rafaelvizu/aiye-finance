@@ -2,13 +2,24 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import { CiBank } from 'react-icons/ci';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import './navbar.css';
-
+import { AuthContext } from '../../providers/auth-provider';
 
 function NavbarComponent()
 {
-     const [auth, setAuth] = useState(false);
+     const [auth, setAuth] = useState<boolean>(false);
+     const { token } = useContext(AuthContext);
+
+     useEffect(() => {
+          if (token)
+          {
+               setAuth(true);
+               return;
+          }
+
+          setAuth(false);
+     }, [token]);
 
      window.addEventListener('scroll', () => {
           const navbar = document.querySelector('.navbar-aiye');

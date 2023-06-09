@@ -1,5 +1,6 @@
 import { Navigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../providers/auth-provider';
 
 
 interface Props
@@ -15,9 +16,10 @@ function RouterWrapper({
 }: Props)
 {
      const [isAuthenticated, setIsAuthenticated] = useState(false);
+     const { token } = useContext(AuthContext);
+
 
      useEffect(() => {
-          const token = localStorage.getItem('@token');
 
           if (token)
           {
@@ -26,16 +28,16 @@ function RouterWrapper({
           }
 
           setIsAuthenticated(false);
-     }, []);
+     }, [token]);
 
      if (isPrivate && !isAuthenticated)
      {
-          return <Navigate to="/" />;
+          return <Navigate to="/signin" />;
      }
 
      if (!isPrivate && isAuthenticated)
      {
-          return <Navigate to="/dashboard" />;
+          return <Navigate to="/" />;
      }
 
      const Component = defaultComponent;
