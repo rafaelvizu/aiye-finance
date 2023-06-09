@@ -9,7 +9,7 @@ import { AuthContext } from '../../providers/auth-provider';
 function NavbarComponent()
 {
      const [auth, setAuth] = useState<boolean>(false);
-     const { token } = useContext(AuthContext);
+     const { token, setToken, setUser } = useContext(AuthContext);
 
      useEffect(() => {
           if (token)
@@ -17,9 +17,18 @@ function NavbarComponent()
                setAuth(true);
                return;
           }
-
+          
           setAuth(false);
      }, [token]);
+
+     function logout()
+     {
+          localStorage.removeItem('token');
+          setToken(null);
+          setUser(null);
+
+          window.location.href = '/signin';
+     }
 
      window.addEventListener('scroll', () => {
           const navbar = document.querySelector('.navbar-aiye');
@@ -50,8 +59,11 @@ function NavbarComponent()
                          <Navbar.Text className="me-5">
                               {
                                    auth ? (
-                                        <Link to="/logout" className="btn btn-primary">
-                                             Logout</Link>
+                                        <a className="btn btn-primary"
+                                             onClick={() => logout()}
+                                        >
+                                             Logout
+                                        </a>
                                    ) : (
                                         <Link to="/signin" className="btn btn-primary">Login</Link>
                                    )

@@ -6,6 +6,7 @@ import { getUser } from "../helpers/get";
 interface AuthContextData
 {
      user: IUser | null;
+     setUser: React.Dispatch<React.SetStateAction<IUser | null>>;
      token: string | null;    
      setToken: React.Dispatch<React.SetStateAction<string | null>>;
 }
@@ -26,7 +27,6 @@ function AuthProvider({ children }: React.PropsWithChildren)
           {
                localStorage.setItem("token", token);
           }
-
      }, [token]);
 
      async function setUserData()
@@ -39,10 +39,14 @@ function AuthProvider({ children }: React.PropsWithChildren)
                localStorage.setItem("token", token);
                setUser(await getUser(token));
           }
+          else 
+          {
+               setUser(null);
+          }
      }
 
      return (
-          <AuthContext.Provider value={{ user, token, setToken }}>
+          <AuthContext.Provider value={{ user, token, setToken, setUser }}>
                {children}
           </AuthContext.Provider>
      );
