@@ -8,6 +8,7 @@ export interface IUser
 
 export interface IFornecedoresPrestadores
 {
+     id?: number;
      nome: string;
      email?: string;
      cpf?: string;
@@ -22,7 +23,7 @@ export interface IFornecedoresPrestadores
      uf?: string;
      cep?: string;
      observacao?: string;
-     tipo: string;
+     tipo?: string;
 
      createdAt?: Date;
      updatedAt?: Date;

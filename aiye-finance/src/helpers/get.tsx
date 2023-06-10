@@ -1,5 +1,7 @@
 import api from "../services/api";
 import { IFornecedoresPrestadores, IUser } from "./interfaces";
+import Verific401 from "./verific-401";
+
 
 export function getUser(token: string) : Promise<IUser | null>
 {
@@ -12,20 +14,15 @@ export function getUser(token: string) : Promise<IUser | null>
           return response.data.user as IUser;
      })
      .catch((error) => {
-          if (error.status === 401)
-          {
-               localStorage.removeItem("token");
-               window.location.href = "/signin";
-          }
+          Verific401(error);
           return null;
      });
 }
 
 
-export async function getFornecedoresPrestadores(token: string, page: number, 
-     search: string, tipo: string): Promise<IFornecedoresPrestadores[] | null>
+export async function getFornecedoresPrestadores(token: string, tipo: string): Promise<IFornecedoresPrestadores[] | null>
 {
-     return api.get(`/fornecedores?page=${page}&search=${search}&tipo=${tipo}`, {
+     return api.get(`/fornecedores-prestadores?tipo=${tipo}`, {
           headers: {
                Authorization: `Bearer ${token}`,
           },
@@ -34,11 +31,7 @@ export async function getFornecedoresPrestadores(token: string, page: number,
           return response.data.fornecedoresPrestadores as IFornecedoresPrestadores[] | [];
      })
      .catch((error) => {
-          if (error.status === 401)
-          {
-               localStorage.removeItem("token");
-               window.location.href = "/signin";
-          }
+          Verific401(error);
           return null;
      });
 }    
