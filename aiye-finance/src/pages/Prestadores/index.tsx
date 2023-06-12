@@ -7,31 +7,52 @@ import { IFornecedoresPrestadores } from '../../helpers/interfaces';
 import { toast } from 'react-toastify';
 import { RxUpdate } from 'react-icons/rx';
 import { ListGroup } from 'react-bootstrap';
+import { postFornecedoresPrestadores } from '../../helpers/post';
 
 
-function Fornecedores()
+function Prestadores()
 {    
-     const [fornecedoresFiltrados, setFornecedoresFiltrados] = useState<IFornecedoresPrestadores[]>([]);
+     const [prestadoresFiltrados, setPrestadoresFiltrados] = useState<IFornecedoresPrestadores[]>([]);
      const [search, setSearch] = useState<string>('');
-     const { getAll, fornecedores } = useContext(MainDataContext);
+     const { getAll, prestadores } = useContext(MainDataContext);
 
-     window.document.title = 'Fornecedores - Aiye Finance';
+     const [nome, setNome] = useState<string>('');
+     const [email, setEmail] = useState<string | null>(null);
+     const [cpf, setCpf] = useState<string | null>(null);
+     const [telefone_1, setTelefone_1] = useState<string | null>(null);
+     const [telefone_2, setTelefone_2] = useState<string | null>(null);
+     const [endereco, setEndereco] = useState<string | null>(null);
+     const [numero, setNumero] = useState<number | null>(null);
+     const [complemento, setComplemento] = useState<string | null>(null);
+     const [bairro, setBairro] = useState<string | null>(null);  
+     const [cidade, setCidade] = useState<string | null>(null);
+     const [uf, setUf] = useState<string | null>(null);
+     const [cep, setCep] = useState<string | null>(null);
+     const [observacoes, setObservacoes] = useState<string | null>(null);  
+
+     window.document.title = 'Prestadores - Aiye Finance';
 
 
      useEffect(() => {
-          if (fornecedores)
+          if (prestadores)
           {
-               setFornecedoresFiltrados(fornecedores.filter((fornecedor) => {
-                    return fornecedor.nome.toLowerCase().includes(search.toLowerCase());
+               setPrestadoresFiltrados(prestadores.filter((prestador) => {
+                    return prestador.nome.toLowerCase().includes(search.toLowerCase());
                }));
           }
 
-     }, [fornecedores]);
+     }, [prestadores]);
+
+
+     async function handleSave()
+     {
+          //
+     }
   
      const [show, setShow] = useState(false);
      return (
           <Container> 
-               <h1 className="text-left mt-5 lead">Fornecedores</h1>
+               <h1 className="text-left mt-5 lead">Prestadores</h1>
                <hr className='mb-5' />
                <Row className="d-flex justify-content-between">
                     <Col xs={12}>
@@ -41,11 +62,11 @@ function Fornecedores()
                                         value={search}
                                         onChange={(e) => {
                                              setSearch(e.target.value);
-                                             setFornecedoresFiltrados(fornecedores.filter((fornecedor) => {
-                                                  return fornecedor.nome.toLowerCase().includes(e.target.value.toLowerCase());
-                                             }));
+                                             setPrestadoresFiltrados(prestadores.filter((prestador) => {
+                                                  return prestador.nome.toLowerCase().includes(e.target.value.toLowerCase());
+                                             }))
                                         }}
-                                        title='Pesquisar fornecedores'
+                                        title='Pesquisar prestadores'
                                    />
                               </Form.Group>
                          </Form>
@@ -61,9 +82,9 @@ function Fornecedores()
                     </Col>
                     <Col xs={6}>
                          <Button variant="primary" 
-                         title='Atualizar fornecedores'
+                         title='Atualizar prestadores'
                          onClick={() => {
-                              toast.info('Atualizando fornecedores...');
+                              toast.info('Atualizando prestadores...');
                               getAll();
                          }} className="float-end">
                               <RxUpdate className="mb-1" /> Atualizar
@@ -75,10 +96,10 @@ function Fornecedores()
                     <Col xs={12}>
                          <ListGroup>
                               {
-                                   fornecedoresFiltrados.map((fornecedor) => {
+                                   prestadoresFiltrados.map((prestador) => {
                                         return (
-                                             <ListGroup.Item key={fornecedor.id} action>
-                                                  {fornecedor.nome}
+                                             <ListGroup.Item key={prestador.id} action>
+                                                  {prestador.nome}
                                              </ListGroup.Item>
                                         )
                                    })
@@ -95,4 +116,4 @@ function Fornecedores()
 }
 
 
-export default Fornecedores;
+export default Prestadores;

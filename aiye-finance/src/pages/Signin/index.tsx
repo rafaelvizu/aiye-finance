@@ -23,6 +23,8 @@ function Signin()
      const [password, setPassword] = useState<string>('');
      const { setToken } = useContext(AuthContext);
 
+     window.document.title = 'Login - Aiye Finance';
+
 
      // adicionar tipo de submit
      async function handleSubmit(e: FormEvent<HTMLFormElement>)
