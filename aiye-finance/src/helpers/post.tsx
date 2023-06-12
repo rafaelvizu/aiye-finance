@@ -23,13 +23,12 @@ export async function postSignin(username: string, password: string) : Promise<s
 export async function postFornecedoresPrestadores(data: IFornecedoresPrestadores, token: string, tipo: string) : Promise<IFornecedoresPrestadores | null>
 {
      // tipo é uma query
-     return api.post(`/tipo/${tipo}`, data, {
+     return api.post(`/fornecedores-prestadores?tipo=${tipo}`, data, {
           headers: {
                Authorization: `Bearer ${token}`,
           }
      })
      .then((response) => {    
-          toast.success('Fornecedor adicionado com sucesso');
           return response.data.fornecedorPrestador as IFornecedoresPrestadores;
      })
      .catch((error) => {

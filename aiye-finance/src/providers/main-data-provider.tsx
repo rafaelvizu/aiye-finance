@@ -37,8 +37,9 @@ function MainDataProvider({ children }: IMainDataProviderProps)
                const fornecedoresData = await getFornecedoresPrestadores(token, 'FORNECEDOR');
                const prestadoresData = await getFornecedoresPrestadores(token, 'PRESTADOR');
                if (fornecedoresData && prestadoresData) {
-                    setFornecedores(fornecedores);
-                    setPrestadores(prestadores);
+                    setFornecedores(fornecedoresData);
+                    setPrestadores(prestadoresData);
+                    
                }
                else 
                {

@@ -5,7 +5,6 @@ import { Button, Modal } from 'react-bootstrap';
 interface IModalBootstrap5
 {
      children: React.ReactNode;
-     handleSave: () => void;
      textButton: string;
      titleModal?: string;
 }
@@ -20,7 +19,7 @@ function ModalBootstrap5(props: IModalBootstrap5)
                     {props.textButton}
                </Button>
 
-               <Modal show={show} onHide={() => setShow(false)} centered>
+               <Modal show={show} onHide={() => setShow(false)} centered size="lg">
                     <Modal.Header closeButton>
                          <Modal.Title>{props.titleModal}</Modal.Title>
                     </Modal.Header>
@@ -29,8 +28,6 @@ function ModalBootstrap5(props: IModalBootstrap5)
                     </Modal.Body>
                     <Modal.Footer>
                          <Button variant="secondary" onClick={() => setShow(false)}>Sair</Button>
-                         <Button variant="primary" onClick={props.handleSave}>Salvar</Button>
-
                     </Modal.Footer>
                     
                </Modal>
