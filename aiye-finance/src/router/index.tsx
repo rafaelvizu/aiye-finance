@@ -6,6 +6,7 @@ import RouterWrapper from "./router-wrapper";
 import Signin from "../pages/Signin";
 import Fornecedore from "../pages/Fornecedores";
 import Prestadores from "../pages/Prestadores";
+import ShowUpdateFornecedorPrestador from "../components/ShowUpdateFornecedorPrestador";
 
 
 function Router() 
@@ -17,7 +18,10 @@ function Router()
                     <Route path="/" element={<RouterWrapper isPrivate={true} defaultComponent={Signin} />} />
                     <Route path="/signin" element={<RouterWrapper isPrivate={false} defaultComponent={Signin} />} />
                     <Route path="/fornecedores" element={<RouterWrapper isPrivate={true} defaultComponent={Fornecedore} />} />
+                    <Route path="/fornecedores/:id" element={<RouterWrapper isPrivate={true} defaultComponent={ShowUpdateFornecedorPrestador} />} />
                     <Route path="/prestadores" element={<RouterWrapper isPrivate={true} defaultComponent={Prestadores} />} />
+                    <Route path="/prestadores/:id" element={<RouterWrapper isPrivate={true} defaultComponent={ShowUpdateFornecedorPrestador} />} />
+
 
                </Routes>
 

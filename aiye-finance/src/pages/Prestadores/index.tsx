@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import { Link } from 'react-router-dom';
 import { MainDataContext } from '../../providers/main-data-provider';
 import { IFornecedoresPrestadores } from '../../helpers/interfaces';
 
@@ -49,7 +50,9 @@ function Prestadores()
 
 
      useEffect(() => {
-          setPrestadoresFiltrados(prestadores);
+          setPrestadoresFiltrados(prestadores.filter((prestador) => {
+               return prestador.nome.toLowerCase().includes(search.toLowerCase());
+          }));
      }, [prestadores]);
 
 
@@ -161,6 +164,7 @@ function Prestadores()
                                              value={cpf ? cpf : ''}
                                              onChange={(e) => setCpf(formatCPF(e.target.value))}
                                              maxLength={14} minLength={14}
+                                             onPaste={(e) => { setCpf(formatCPF(e.clipboardData.getData('text'))) }}
                                         />
                                         <Form.Label className="mb-1 mt-3">
                                              CNPJ
@@ -169,6 +173,7 @@ function Prestadores()
                                              value={cnpj ? cnpj : ''}
                                              onChange={(e) => setCnpj(formatCNPJ(e.target.value))}
                                              maxLength={18} minLength={18}
+                                             onPaste={(e) => { setCnpj(formatCNPJ(e.clipboardData.getData('text'))) }}
                                         />
                                         <Form.Label className="mb-1 mt-3">
                                              Telefone 1
@@ -178,6 +183,7 @@ function Prestadores()
                                              value={telefone_1 ? telefone_1 : ''}
                                              onChange={(e) => setTelefone_1(formatTelefone(e.target.value))}
                                              minLength={15}
+                                             onPaste={(e) => { setTelefone_1(formatTelefone(e.clipboardData.getData('text'))) }}
                                         />
                                         <Form.Label className="mb-1 mt-3">
                                              Telefone 2
@@ -186,6 +192,7 @@ function Prestadores()
                                              value={telefone_2 ? telefone_2 : ''}
                                              onChange={(e) => setTelefone_2(formatTelefone(e.target.value))}
                                              maxLength={15} minLength={15}
+                                             onPaste={(e) => { setTelefone_2(formatTelefone(e.clipboardData.getData('text'))) }}
                                         />
                                         <Form.Label className="mb-1 mt-3">
                                              Endereço
@@ -234,6 +241,7 @@ function Prestadores()
                                              value={uf ? uf : ''}
                                              onChange={(e) => setUf(formatUF(e.target.value))}
                                              maxLength={2} minLength={2}
+                                             onPaste={(e) => { setUf(formatUF(e.clipboardData.getData('text'))) }}
                                         />
                                         <Form.Label className="mb-1 mt-3">
                                              CEP
@@ -242,6 +250,7 @@ function Prestadores()
                                              value={cep ? cep : ''}
                                              onChange={(e) => setCep(formatCEP(e.target.value))}
                                              maxLength={9} minLength={9}
+                                             onPaste={(e) => { setCep(formatCEP(e.clipboardData.getData('text'))) }}
                                         />
                                         <Form.Label className="mb-1 mt-3">
                                              Observações
@@ -277,7 +286,22 @@ function Prestadores()
                                    prestadoresFiltrados.map((prestador) => {
                                         return (
                                              <ListGroup.Item key={prestador.id} action>
-                                                  {prestador.nome}
+                                                  <Row>
+                                                       <Col xs={6}>
+                                                            <h5 className="mb-1">{prestador.nome}</h5>
+                                                       </Col>
+
+                                                       <Col xs={6} className="d-flex justify-content-end"> 
+                                                            <Link className="btn btn-primary me-2" to={`/prestadores/${prestador.id}`}>
+                                                                 Editar
+                                                            </Link>
+                                                            <Button variant="danger" className="me-2">
+                                                                 Excluir   
+                                                            </Button>
+
+                                                       </Col>
+
+                                                  </Row>
                                              </ListGroup.Item>
                                         )
                                    })

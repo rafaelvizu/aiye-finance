@@ -32,7 +32,7 @@ function NavbarComponent()
 
      window.addEventListener('scroll', () => {
           const navbar = document.querySelector('.navbar-aiye');
-          if(window.scrollY > 100)
+          if(window.scrollY > 150)
           {
                navbar?.classList.add('fixed-top');
           }

@@ -7,6 +7,11 @@ import { IFornecedoresPrestadores } from '../../helpers/interfaces';
 import { toast } from 'react-toastify';
 import { RxUpdate } from 'react-icons/rx';
 import { ListGroup } from 'react-bootstrap';
+import { AuthContext } from '../../providers/auth-provider';
+import Loading from '../../components/Loading';
+import { postFornecedoresPrestadores } from '../../helpers/post';
+import { formatCEP, formatCNPJ, formatCPF, formatTelefone, formatUF, unformatCEP, unformatCNPJ, unformatCPF, unformatTelefone } from '../../helpers/formatText';
+import { Link } from 'react-router-dom';
 
 
 function Fornecedores()
@@ -14,6 +19,23 @@ function Fornecedores()
      const [fornecedoresFiltrados, setFornecedoresFiltrados] = useState<IFornecedoresPrestadores[]>([]);
      const [search, setSearch] = useState<string>('');
      const { getAll, fornecedores } = useContext(MainDataContext);
+     const [loading, setLoading] = useState<boolean>(false)
+     const { token } = useContext(AuthContext);
+
+     const [nome, setNome] = useState<string>('');
+     const [email, setEmail] = useState<string | null>(null);
+     const [cpf, setCpf] = useState<string | null>(null);
+     const [cnpj, setCnpj] = useState<string | null>(null);
+     const [telefone_1, setTelefone_1] = useState<string | null>(null);
+     const [telefone_2, setTelefone_2] = useState<string | null>(null);
+     const [endereco, setEndereco] = useState<string | null>(null);
+     const [numero, setNumero] = useState<number | null>(null);
+     const [complemento, setComplemento] = useState<string | null>(null);
+     const [bairro, setBairro] = useState<string | null>(null);  
+     const [cidade, setCidade] = useState<string | null>(null);
+     const [uf, setUf] = useState<string | null>(null);
+     const [cep, setCep] = useState<string | null>(null);
+     const [observacao, setObservacao] = useState<string | null>(null);  
 
      window.document.title = 'Fornecedores - Aiye Finance';
 
@@ -27,6 +49,65 @@ function Fornecedores()
           }
 
      }, [fornecedores]);
+
+
+     async function handleSave(e: React.FormEvent<HTMLFormElement>)
+     {
+          e.preventDefault();
+          setLoading(true);
+          const data = {
+               nome,
+               email: email ? email : null,
+               cpf: cpf ? unformatCPF(cpf as string) : null,
+               cnpj: cnpj ? unformatCNPJ(cnpj as string) : null,
+               telefone_1: telefone_1 ? unformatTelefone(telefone_1 as string) : null,
+               telefone_2: telefone_2 ? unformatTelefone(telefone_2 as string) : null,
+               endereco: endereco ? endereco : null,
+               numero: numero ? numero : null,
+               complemento: complemento ? complemento : null,
+               bairro: bairro ? bairro : null,
+               cidade: cidade ? cidade : null,
+               uf: uf ? uf : null,
+               cep: cep ? unformatCEP(cep as string) : null,
+               observacao: observacao ? observacao : null,
+          } as IFornecedoresPrestadores;
+
+          const response = await postFornecedoresPrestadores(data, token as string, 'FORNECEDOR');
+
+          setLoading(false);
+
+          if (response)
+          {
+               toast.success('Prestador adicionado com sucesso');
+               getAll();
+               clearFields();
+               return;
+          }
+     }
+
+     function clearFields()
+     {
+          setNome('');
+          setEmail(null);
+          setCpf(null);
+          setCnpj(null);
+          setTelefone_1(null);
+          setTelefone_2(null);
+          setEndereco(null);
+          setNumero(null);
+          setComplemento(null);
+          setBairro(null);
+          setCidade(null);
+          setUf(null);
+          setCep(null);
+          setObservacao(null);
+     }
+
+  
+     if (loading)
+     {
+          return <Loading />
+     }
   
      return (
           <Container> 
@@ -51,9 +132,134 @@ function Fornecedores()
                     </Col>
                     <Col xs={6}>
                          <ModalBootstrap5 textButton="Novo" titleModal="Adicionar Fornecedor">
-                              <h1>
-                                   ad
-                              </h1>
+                         <Form onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleSave(e)}>
+                                   <Form.Group className="mb-3" controlId="formBasicEmail">
+                                        <Form.Label className="mb-1">
+                                             Nome
+                                        </Form.Label>
+                                        <Form.Control type="text" placeholder="Nome"
+                                             value={nome}
+                                             onChange={(e) => setNome(e.target.value)}
+                                             minLength={1} maxLength={100}
+                                             required
+                                        />
+                                   
+                                        <Form.Label className="mb-1 mt-3">
+                                             Email
+                                        </Form.Label>
+                                        <Form.Control type="email" placeholder="Email"
+                                             value={email ? email : ''}
+                                             onChange={(e) => setEmail(e.target.value)}
+                                             maxLength={100}
+                                        />
+                                        <Form.Label className="mb-1 mt-3">
+                                             CPF
+                                        </Form.Label>
+                                        <Form.Control type="text" placeholder="CPF"
+                                             value={cpf ? cpf : ''}
+                                             onChange={(e) => setCpf(formatCPF(e.target.value))}
+                                             maxLength={14} minLength={14}
+                                             onPaste={(e) => { setCpf(formatCPF(e.clipboardData.getData('text'))) }}
+                                        />
+                                        <Form.Label className="mb-1 mt-3">
+                                             CNPJ
+                                        </Form.Label>
+                                        <Form.Control type="text" placeholder="CNPJ"
+                                             value={cnpj ? cnpj : ''}
+                                             onChange={(e) => setCnpj(formatCNPJ(e.target.value))}
+                                             maxLength={18} minLength={18}
+                                             onPaste={(e) => { setCnpj(formatCNPJ(e.clipboardData.getData('text'))) }}
+                                        />
+                                        <Form.Label className="mb-1 mt-3">
+                                             Telefone 1
+                                        </Form.Label>
+                                        <Form.Control type="text" placeholder="Telefone 1"
+                                             maxLength={15}
+                                             value={telefone_1 ? telefone_1 : ''}
+                                             onChange={(e) => setTelefone_1(formatTelefone(e.target.value))}
+                                             minLength={15}
+                                             onPaste={(e) => { setTelefone_1(formatTelefone(e.clipboardData.getData('text'))) }}
+                                        />
+                                        <Form.Label className="mb-1 mt-3">
+                                             Telefone 2
+                                        </Form.Label>
+                                        <Form.Control type="text" placeholder="Telefone 2"
+                                             value={telefone_2 ? telefone_2 : ''}
+                                             onChange={(e) => setTelefone_2(formatTelefone(e.target.value))}
+                                             maxLength={15} minLength={15}
+                                             onPaste={(e) => { setTelefone_2(formatTelefone(e.clipboardData.getData('text'))) }}
+                                        />
+                                        <Form.Label className="mb-1 mt-3">
+                                             Endereço
+                                        </Form.Label>
+                                        <Form.Control type="text" placeholder="Endereço"
+                                             value={endereco ? endereco : ''}
+                                             onChange={(e) => setEndereco(e.target.value)}
+                                             maxLength={100} minLength={1}
+                                        />
+                                        <Form.Label className="mb-1 mt-3">
+                                             Número
+                                        </Form.Label>
+                                        <Form.Control type="number" placeholder="Número"
+                                             value={numero ? numero : ''}
+                                             onChange={(e) => setNumero(Number(e.target.value))}
+                                             min={0}
+                                        />
+                                        <Form.Label className="mb-1 mt-3">
+                                             Complemento
+                                        </Form.Label>
+                                        <Form.Control type="text" placeholder="Complemento"
+                                             value={complemento ? complemento : ''}
+                                             onChange={(e) => setComplemento(e.target.value)}
+                                             maxLength={100} minLength={1}
+                                        />
+                                        <Form.Label className="mb-1 mt-3">
+                                             Bairro
+                                        </Form.Label>
+                                        <Form.Control type="text" placeholder="Bairro"
+                                             value={bairro ? bairro : ''}
+                                             onChange={(e) => setBairro(e.target.value)}
+                                             maxLength={100} minLength={1}
+                                        />
+                                        <Form.Label className="mb-1 mt-3">
+                                             Cidade
+                                        </Form.Label>
+                                        <Form.Control type="text" placeholder="Cidade"
+                                             value={cidade ? cidade : ''}
+                                             onChange={(e) => setCidade(e.target.value)}
+                                             maxLength={100} minLength={1}
+                                        />
+                                        <Form.Label className="mb-1 mt-3">
+                                             UF
+                                        </Form.Label>
+                                        <Form.Control type="text" placeholder="UF"
+                                             value={uf ? uf : ''}
+                                             onChange={(e) => setUf(formatUF(e.target.value))}
+                                             maxLength={2} minLength={2}
+                                             onPaste={(e) => { setUf(formatUF(e.clipboardData.getData('text'))) }}
+                                        />
+                                        <Form.Label className="mb-1 mt-3">
+                                             CEP
+                                        </Form.Label>
+                                        <Form.Control type="text" placeholder="CEP"
+                                             value={cep ? cep : ''}
+                                             onChange={(e) => setCep(formatCEP(e.target.value))}
+                                             maxLength={9} minLength={9}
+                                             onPaste={(e) => { setCep(formatCEP(e.clipboardData.getData('text'))) }}
+                                        />
+                                        <Form.Label className="mb-1 mt-3">
+                                             Observações
+                                        </Form.Label>
+                                        <Form.Control as="textarea" rows={3} placeholder="Observações"
+                                             value={observacao ? observacao : ''}
+                                             onChange={(e) => setObservacao(e.target.value)}
+                                             maxLength={250} minLength={1}
+                                        />
+                                        <Form.Control type="submit" className="mt-3 bg-primary text-white"
+                                             value="Salvar" 
+                                        />
+                                   </Form.Group>
+                              </Form>                         
                          </ModalBootstrap5>
                     </Col>
                     <Col xs={6}>
@@ -70,12 +276,27 @@ function Fornecedores()
 
                <Row>
                     <Col xs={12}>
-                         <ListGroup>
+                         <ListGroup className="mt-3">
                               {
                                    fornecedoresFiltrados.map((fornecedor) => {
                                         return (
                                              <ListGroup.Item key={fornecedor.id} action>
-                                                  {fornecedor.nome}
+                                                  <Row>
+                                                       <Col xs={6}>
+                                                            <h5 className="mb-1">{fornecedor.nome}</h5>
+                                                       </Col>
+
+                                                       <Col xs={6} className="d-flex justify-content-end"> 
+                                                            <Link className="btn btn-primary me-2" to={`/fornecedores/${fornecedor.id}`}>
+                                                                 Editar
+                                                            </Link>
+                                                            <Button variant="danger" className="me-2">
+                                                                 Excluir   
+                                                            </Button>
+
+                                                       </Col>
+
+                                                  </Row>
                                              </ListGroup.Item>
                                         )
                                    })

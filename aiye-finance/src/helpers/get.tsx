@@ -35,3 +35,19 @@ export async function getFornecedoresPrestadores(token: string, tipo: string): P
           return null;
      });
 }    
+
+export async function getFornecedoresPrestadoresById(token: string, id: string, tipo: string): Promise<IFornecedoresPrestadores | null>
+{
+     return api.get(`/fornecedores-prestadores/${id}?tipo=${tipo}`, {
+          headers: {
+               Authorization: `Bearer ${token}`,
+          },
+     })
+     .then((response) => {
+          return response.data.fornecedorPrestador as IFornecedoresPrestadores;
+     })
+     .catch((error) => {
+          Verific401(error);
+          return null;
+     });
+}
