@@ -7,6 +7,7 @@ import Signin from "../pages/Signin";
 import Fornecedore from "../pages/Fornecedores";
 import Prestadores from "../pages/Prestadores";
 import ShowUpdateFornecedorPrestador from "../components/ShowUpdateFornecedorPrestador";
+import Configuracoes from "../pages/Configuracoes";
 
 
 function Router() 
@@ -21,6 +22,7 @@ function Router()
                     <Route path="/fornecedores/:id" element={<RouterWrapper isPrivate={true} defaultComponent={ShowUpdateFornecedorPrestador} />} />
                     <Route path="/prestadores" element={<RouterWrapper isPrivate={true} defaultComponent={Prestadores} />} />
                     <Route path="/prestadores/:id" element={<RouterWrapper isPrivate={true} defaultComponent={ShowUpdateFornecedorPrestador} />} />
+                    <Route path="/configuracoes" element={<RouterWrapper isPrivate={true} defaultComponent={Configuracoes} />} />
 
 
                </Routes>
