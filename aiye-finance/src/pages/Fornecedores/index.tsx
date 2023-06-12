@@ -28,7 +28,6 @@ function Fornecedores()
 
      }, [fornecedores]);
   
-     const [show, setShow] = useState(false);
      return (
           <Container> 
                <h1 className="text-left mt-5 lead">Fornecedores</h1>
@@ -51,9 +50,7 @@ function Fornecedores()
                          </Form>
                     </Col>
                     <Col xs={6}>
-                         <ModalBootstrap5 textButton="Novo" titleModal="Adicionar Fornecedor" handleSave={() => {
-                              setShow(false);          
-                         }}>
+                         <ModalBootstrap5 textButton="Novo" titleModal="Adicionar Fornecedor">
                               <h1>
                                    ad
                               </h1>
