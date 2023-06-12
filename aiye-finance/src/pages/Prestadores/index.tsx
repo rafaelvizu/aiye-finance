@@ -20,6 +20,7 @@ import { formatCEP, formatCNPJ,
      unformatCNPJ, unformatCPF, 
      unformatTelefone 
 } from '../../helpers/formatText';
+import { deleteFornecedorPrestador } from '../../helpers/delete';
 
 
 function Prestadores()
@@ -88,6 +89,23 @@ function Prestadores()
                clearFields();
                return;
           }
+     }
+
+     async function handleDelete(id: number) 
+     {
+          setLoading(true);
+          const response = await deleteFornecedorPrestador(id, token as string);
+
+          setLoading(false);
+
+          if (response)  
+          {
+               toast.success('Prestador excluído com sucesso');
+               getAll();
+               return;
+          }
+
+          toast.error('Erro ao excluir fornecedor');
      }
 
      function clearFields()
@@ -295,7 +313,9 @@ function Prestadores()
                                                             <Link className="btn btn-primary me-2" to={`/prestadores/${prestador.id}`}>
                                                                  Editar
                                                             </Link>
-                                                            <Button variant="danger" className="me-2">
+                                                            <Button variant="danger" className="me-2"
+                                                                 onClick={() => handleDelete(prestador.id as number)}
+                                                            >
                                                                  Excluir   
                                                             </Button>
 

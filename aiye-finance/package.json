@@ -2,6 +2,7 @@
   "name": "aiye-finance",
   "private": true,
   "version": "0.0.0",
+  "license": "../aiye-finance",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build && electron-builder",

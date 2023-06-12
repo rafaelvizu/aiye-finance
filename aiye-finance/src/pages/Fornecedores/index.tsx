@@ -12,6 +12,7 @@ import Loading from '../../components/Loading';
 import { postFornecedoresPrestadores } from '../../helpers/post';
 import { formatCEP, formatCNPJ, formatCPF, formatTelefone, formatUF, unformatCEP, unformatCNPJ, unformatCPF, unformatTelefone } from '../../helpers/formatText';
 import { Link } from 'react-router-dom';
+import { deleteFornecedorPrestador } from '../../helpers/delete';
 
 
 function Fornecedores()
@@ -83,6 +84,23 @@ function Fornecedores()
                clearFields();
                return;
           }
+     }
+
+     async function handleDelete(id: number) 
+     {
+          setLoading(true);
+          const response = await deleteFornecedorPrestador(id, token as string);
+
+          setLoading(false);
+
+          if (response)  
+          {
+               toast.success('Fornecedor excluído com sucesso');
+               getAll();
+               return;
+          }
+
+          toast.error('Erro ao excluir fornecedor');
      }
 
      function clearFields()
@@ -290,7 +308,9 @@ function Fornecedores()
                                                             <Link className="btn btn-primary me-2" to={`/fornecedores/${fornecedor.id}`}>
                                                                  Editar
                                                             </Link>
-                                                            <Button variant="danger" className="me-2">
+                                                            <Button variant="danger" className="me-2"
+                                                                 onClick={() => handleDelete(fornecedor.id as number)}
+                                                            >
                                                                  Excluir   
                                                             </Button>
 
